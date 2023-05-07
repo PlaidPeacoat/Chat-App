@@ -7,6 +7,7 @@ import {
   View,
   ImageBackground,
 } from "react-native";
+import {KeyboardAvoidingView} from "react-native-gifted-chat";
 
 const Start = ({ navigation }) => {
   const [text, setText] = useState("");
@@ -28,7 +29,7 @@ const Start = ({ navigation }) => {
             style={styles.input}
             onChangeText={setText}
           />
-          <Text>Choose Background Color</Text>
+          <Text style={styles.chooseBackgroundColor}>Choose Background Color</Text>
           <View style={styles.radioButtonContainer}>
             <TouchableOpacity
               style={[styles.radioButton, { backgroundColor: "#ff5e5e" }]}
@@ -60,6 +61,9 @@ const Start = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      {Platform.OS === "ios" ? (
+        <KeyboardAvoidingView behavior='padding' />
+      ) : null}
     </ImageBackground>
   );
 };
@@ -101,6 +105,11 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
+  },
+  chooseBackgroundColor: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "white",
   },
   input: {
     height: 40,
