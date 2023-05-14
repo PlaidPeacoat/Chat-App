@@ -1,20 +1,35 @@
-import { StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Start from "./components/Start";
-import Chat from "./components/Chat";
+import React, { Component } from 'react';
+import { StyleSheet, Text, View } from "react-native";
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+// import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+const Tab = createBottomTabNavigator();
 
-const Stack = createNativeStackNavigator();
+// CREATED COMPONENTS //////////
+import Start from './components/Start';
+import Chat from './components/Chat';
 
-const App = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='Start'>
-        <Stack.Screen name='Start' component={Start} />
-        <Stack.Screen name='Chat' component={Chat} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
+export default class App extends React.Component  {
+  constructor(props) {
+    super(props);
+    this.state = { text: '' };
+  }
 
-export default App;
+  render() {
+    return (
+      <NavigationContainer>
+        <Tab.Navigator initialRouteName="Start">
+          <Tab.Screen
+            name="Start"
+            component={Start}
+          />
+          <Tab.Screen
+            name="Chat"
+            component={Chat}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    );
+  }
+}
