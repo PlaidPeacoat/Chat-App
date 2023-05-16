@@ -11,10 +11,10 @@ import {
 
 // an object of objects. When referenced in a "style" attribute, the backgroundColor is applied!
 const bgColors = {
-  black: { backgroundColor: "#000000" },
-  gray: { backgroundColor: "#8a95a5" },
-  purple: { backgroundColor: "#474056" },
-  green: { backgroundColor: "#94ae89" },
+  mint: { backgroundColor: "#36FFAD" },
+  blue: { backgroundColor: "#65CEFF" },
+  purple: { backgroundColor: "#9871EB" },
+  pink: { backgroundColor: "#FD77FF" },
 };
 
 export default class Start extends React.Component {
@@ -27,14 +27,14 @@ export default class Start extends React.Component {
   }
 
   render() {
-    // black = bgColors.black i.e., { backgroundColor: "#000000" }
-    const { black, gray, purple, green } = bgColors;
+    // mint = bgColors.mint i.e., { backgroundColor: "#000000" }
+    const { mint, blue, purple, pink } = bgColors;
     return (
       <ImageBackground
         source={require("../assets/chatAppBackground.jpg")}
         style={[styles.container, styles.columnEvenlyCenter]}
       >
-        <Text style={styles.title}>Chat Tack</Text>
+        <Text style={styles.title}>Chat Away!</Text>
 
         <View style={[styles.nameInput__container, styles.columnEvenlyCenter]}>
           <TextInput
@@ -52,23 +52,23 @@ export default class Start extends React.Component {
               <TouchableOpacity
                 style={[
                   styles.colorSelect__dot,
-                  black,
-                  this.state.color === black.backgroundColor
+                  mint,
+                  this.state.color === mint.backgroundColor
                     ? styles.colorSelect__dotSelected
                     : {},
                 ]}
-                onPress={() => this.setState({ bgColor: black.backgroundColor })} // 
+                onPress={() => this.setState({ bgColor: mint.backgroundColor })} // 
               />
 
               <TouchableOpacity
                 style={[
                   styles.colorSelect__dot,
-                  gray,
-                  this.state.color === gray.backgroundColor
+                  blue,
+                  this.state.color === blue.backgroundColor
                     ? styles.colorSelect__dotSelected
                     : {},
                 ]}
-                onPress={() => this.setState({ bgColor: gray.backgroundColor })}
+                onPress={() => this.setState({ bgColor: blue.backgroundColor })}
               />
 
               <TouchableOpacity
@@ -85,12 +85,12 @@ export default class Start extends React.Component {
               <TouchableOpacity
                 style={[
                   styles.colorSelect__dot,
-                  green,
-                  this.state.color === green.backgroundColor
+                  pink,
+                  this.state.color === pink.backgroundColor
                     ? styles.colorSelect__dotSelected
                     : {},
                 ]}
-                onPress={() => this.setState({ bgColor: green.backgroundColor })}
+                onPress={() => this.setState({ bgColor: pink.backgroundColor })}
               />
             </View>
           </View>
@@ -99,7 +99,7 @@ export default class Start extends React.Component {
             onPress={() =>
               this.props.navigation.navigate("Chat", {
                 name: this.state.name || "no-name",
-                bgColor: this.state.bgColor || bgColors.gray.backgroundColor,
+                bgColor: this.state.bgColor || bgColors.blue.backgroundColor,
               })
             }
           >
@@ -132,7 +132,6 @@ const styles = StyleSheet.create({
   },
 
   nameInput__container: {
-    backgroundColor: "#fff",
     height: "44%",
     minHeight: 200,
     width: "88%",
@@ -142,9 +141,9 @@ const styles = StyleSheet.create({
     height: 50,
     width: "88%",
     paddingLeft: 20,
-    borderColor: "gray",
+    borderColor: "#fff",
     borderWidth: 1,
-    color: "#757083",
+    color: "#fff",
     opacity: 50,
     fontSize: 16,
     fontWeight: "300",
@@ -157,8 +156,8 @@ const styles = StyleSheet.create({
   colorSelect__text: {
     textAlign: "center",
     fontSize: 16,
-    fontWeight: "300",
-    color: "#757083",
+    fontWeight: "600",
+    color: "#fff",
     opacity: 100,
   },
 
