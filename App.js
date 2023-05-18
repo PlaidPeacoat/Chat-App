@@ -1,14 +1,16 @@
-import React, { Component } from 'react';
-import Start from './components/Start';
-import Chat from './components/Chat';
-import 'react-native-gesture-handler';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import { Alert, LogBox } from 'react-native'
+import { Alert, StyleSheet } from "react-native";
 import { initializeApp } from "firebase/app";
+import {
+  getFirestore,
+  disableNetwork,
+  enableNetwork,
+} from "firebase/firestore";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Start from "./components/Start";
+import Chat from "./components/Chat";
 import { useNetInfo } from "@react-native-community/netinfo";
-import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore";
-LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
+import { useEffect } from "react";
 
 const Stack = createStackNavigator();
 
@@ -31,30 +33,33 @@ const App = () => {
   // Initialize Cloud Firestore and get a reference to the service
   const db = getFirestore(app);
 
-  useEffect(() => {
-    if (connectionStatus.isConnected === false) {
-      Alert.alert("Connection Lost!!");
-      disableNetwork(db);
-    } else if (connectionStatus.isConnected === true) {
-      enableNetwork(db);
-    }
-  }, [connectionStatus.isConnected]);
+  const App = () => {
+    
+    const connectionStatus = useNetInfo();
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Start"
-      >
-        <Stack.Screen name="Start" component={Start} />
-        <Stack.Screen
-          name="Chat"
-        >
-          {props => <Messages isConnected={connectionStatus.isConnected} db={db} {...props} />}
-          
-        </Stack.Screen>
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
+    useEffect(() => {
+        //check if connected to the internet, if not give an error message
+      if (connectionStatus.isConnected === false) {
+        Alert.alert("Connection Lost");
+        disableNetwork(db); //disable connection to firestore if not connected to the internet
+      } else if (connectionStatus.isConnected === true) {
+        enableNetwork(db); //enable connection to firestore if connected to the internet
+      }  
+    }, [connectionStatus.isConnected]);
 
-export default App;
+    return ( //'return' is what is going to be shown on the screen
+      <NavigationContainer> //creates navigations container to show different screens and navigate between them
+        <Stack.Navigator initialRouteName="Start">
+          <Stack.Screen name = "Start" component = {Start} />
+          <Stack.Screen name = "Chat">
+            {(props) => (
+              <Chat is Connected={connectionStatus.isConnected} db={db} {...props} /> 
+              //passes the connection status, database, and props to the chat component, so that when we use chat, it stores on firebase
+            )}
+          </Stack.Screen>
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  };
+
+  export default App;
