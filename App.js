@@ -14,51 +14,51 @@ import { useEffect } from "react";
 
 const Stack = createNativeStackNavigator();
 
+// Firebase configuration object with API keys and project information
+const firebaseConfig = {
+  apiKey: "AIzaSyAwhCkBTjdCiY-OwDlKxXz84jnKOAn0aFU",
+  authDomain: "chatapp-be8a9.firebaseapp.com",
+  projectId: "chatapp-be8a9",
+  storageBucket: "chatapp-be8a9.appspot.com",
+  messagingSenderId: "223689015888",
+  appId: "1:223689015888:web:3d397c18f2a7eeb9504755",
+  measurementId: "G-VLSBNSB8VB",
+};
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAwhCkBTjdCiY-OwDlKxXz84jnKOAn0aFU",
-      authDomain: "chatapp-be8a9.firebaseapp.com",
-      projectId: "chatapp-be8a9",
-      storageBucket: "chatapp-be8a9.appspot.com",
-      messagingSenderId: "223689015888",
-      appId: "1:223689015888:web:3d397c18f2a7eeb9504755",
-      measurementId: "G-VLSBNSB8VB"
-  };
+const app = initializeApp(firebaseConfig);
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  // Initialize Cloud Firestore and get a reference to the service
-  const db = getFirestore(app);
+const App = () => {
+  // Get the network connection status using useNetInfo hook
+  const connectionStatus = useNetInfo();
 
-  const App = () => {
-    
-    const connectionStatus = useNetInfo();
+  useEffect(() => {
+    // Check the connection status and perform actions accordingly
+    if (connectionStatus.isConnected === false) {
+      Alert.alert("Connection Lost!");
+      disableNetwork(db); // Disable Firestore network access
+    } else if (connectionStatus.isConnected === true) {
+      enableNetwork(db); // Enable Firestore network access
+    }
+  }, [connectionStatus.isConnected]);
 
-    useEffect(() => {
-        //check if connected to the internet, if not give an error message
-      if (connectionStatus.isConnected === false) {
-        Alert.alert("Connection Lost");
-        disableNetwork(db); //disable connection to firestore if not connected to the internet
-      } else if (connectionStatus.isConnected === true) {
-        enableNetwork(db); //enable connection to firestore if connected to the internet
-      }  
-    }, [connectionStatus.isConnected]);
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Start">
+        <Stack.Screen name="Start" component={Start} />
+        <Stack.Screen name="Chat">
+          {(props) => (
+            <Chat
+              isConnected={connectionStatus.isConnected}
+              db={db}
+              {...props}
+            />
+          )}
+        </Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
 
-    return ( //'return' is what is going to be shown on the screen
-      <NavigationContainer> //creates navigations container to show different screens and navigate between them
-        <Stack.Navigator initialRouteName="Start">
-          <Stack.Screen name = "Start" component = {Start} />
-          <Stack.Screen name = "Chat">
-            {(props) => (
-              <Chat is Connected={connectionStatus.isConnected} db={db} {...props} /> 
-              //passes the connection status, database, and props to the chat component, so that when we use chat, it stores on firebase
-            )}
-          </Stack.Screen>
-        </Stack.Navigator>
-      </NavigationContainer>
-    );
-  };
-
-  
-  export default App;
+export default App;
