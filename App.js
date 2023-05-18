@@ -12,10 +12,8 @@ import Chat from "./components/Chat";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { useEffect } from "react";
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
-const App = () => {
-  const connectionStatus = useNetInfo();
 
   const firebaseConfig = {
     apiKey: "AIzaSyAwhCkBTjdCiY-OwDlKxXz84jnKOAn0aFU",
@@ -62,4 +60,5 @@ const App = () => {
     );
   };
 
+  
   export default App;
