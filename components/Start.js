@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+
 // an object of objects. When referenced in a "style" attribute, the backgroundColor is applied!
 const bgColors = {
   mint: { backgroundColor: "#36FFAD" },
