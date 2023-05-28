@@ -11,6 +11,8 @@ import Start from "./components/Start";
 import Chat from "./components/Chat";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { useEffect } from "react";
+import * as Speech from "expo-speech";
+import { getStorage } from "firebase/storage"; 
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +30,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
+
+const storage = getStorage(app);
 
 const App = () => {
   // Get the network connection status using useNetInfo hook
@@ -47,15 +51,17 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Start">
         <Stack.Screen name="Start" component={Start} />
-        <Stack.Screen name="Chat">
-          {(props) => (
-            <Chat
-              isConnected={connectionStatus.isConnected}
-              db={db}
-              {...props}
-            />
-          )}
+        <Stack.Screen
+          name="Chat"
+        >
+          {props => <Chat
+            isConnected={connectionStatus.isConnected}
+            db={db}
+            storage={storage}
+            {...props}
+          />}
         </Stack.Screen>
+
       </Stack.Navigator>
     </NavigationContainer>
   );
