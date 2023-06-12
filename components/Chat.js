@@ -21,7 +21,10 @@ const Chat = ({ db, storage, route, navigation, isConnected }) => {
   useEffect(() => {
     // Set screen title according to given name from prop
     navigation.setOptions({ title: name });
-
+/**
+ * If the user is connected to the internet, register a listener to the database
+ * to read messages. If the user is offline, load messages from offline storage.
+ */
     if (isConnected === true) {
       // Unregister current onSnapshot() listener to avoid registering multiple
       // listeners when useEffect code is re-executed.
@@ -52,7 +55,10 @@ const Chat = ({ db, storage, route, navigation, isConnected }) => {
     };
   }, [isConnected]);
 
+  /**  Save messages to offline storage
+  //Array of messages to save to offline storage
   // Save messages to offline storage
+  */
   const cacheMessages = async (messagesToCache) => {
     try {
       await AsyncStorage.setItem("chat", JSON.stringify(messagesToCache));
